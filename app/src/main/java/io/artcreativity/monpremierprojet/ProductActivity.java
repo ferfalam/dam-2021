@@ -36,11 +36,6 @@ public class ProductActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Product product = (Product) getIntent().getSerializableExtra("NEW_PROD");
-        if (product != null){
-            products.add(0, product);
-        }
-
         binding = ActivityProductBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -83,6 +78,8 @@ public class ProductActivity extends AppCompatActivity {
         if(requestCode==MAIN_CALL) {
             if(resultCode== Activity.RESULT_OK) {
                 Log.e("TAG", "onActivityResult: " + data.getSerializableExtra("MY_PROD"));
+                Product product = (Product) getIntent().getSerializableExtra("NEW_PROD");
+                products.add(0, product);
             }
         }
     }

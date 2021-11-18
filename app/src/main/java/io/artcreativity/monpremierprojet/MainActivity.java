@@ -104,9 +104,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.e(TAG, "saveProduct: " + product);
             Toast.makeText(getApplicationContext(), "Produit ajouté", Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(MainActivity.this, ProductActivity.class);
+            Intent intent = getIntent();
             intent.putExtra("NEW_PROD", product);
-            startActivity(intent);
+            setResult(Activity.RESULT_OK, intent);
+            //finish();
         }
     }
 
