@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red_gold">#B00020</color>
     <color name="yellow_gold">#FFC107</color>
+    <color name="error_color">#B60505</color>
 </resources>

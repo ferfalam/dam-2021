@@ -51,4 +51,6 @@ public class ProductAdapter extends BaseAdapter {
         priceView.setText(MessageFormat.format("XOF {0}", products.get(i).price));
         return myView;
     }
+
+
 }

@@ -21,4 +21,9 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="available">disponibles</string>
+    <string name="name_error_text">Désignation obligatoire</string>
+    <string name="description_error_text">Description est obligatoire</string>
+    <string name="price_error_text">Prix est obligatoire</string>
+    <string name="quantity_in_stock_error_text">Quantité en stock est obligatoire</string>
+    <string name="alert_quantity_error_text">Quantité d\'alerte est obligatoire</string>
 </resources>

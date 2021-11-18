@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,10 +36,27 @@ public class ProductActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Product product = (Product) getIntent().getSerializableExtra("NEW_PROD");
+        if (product != null){
+            products.add(0, product);
+        }
+
         binding = ActivityProductBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
+
+        binding.ourListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                Object p = binding.ourListView.getItemAtPosition(position);
+                Product product = (Product) p;
+                Intent intent = new Intent(ProductActivity.this, ProductDetailActivity.class);
+                intent.putExtra("MY_PROD", product);
+                startActivityIfNeeded(intent, MAIN_CALL);
+            }
+        });
 
         generateProducts();
         binding.fab.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +74,8 @@ public class ProductActivity extends AppCompatActivity {
 //        buildSimpleAdapterData();
         buildCustomAdapter();
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
