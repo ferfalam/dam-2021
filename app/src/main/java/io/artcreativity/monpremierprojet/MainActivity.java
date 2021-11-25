@@ -15,11 +15,14 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import io.artcreativity.monpremierprojet.dao.ProductRoomDao;
 import io.artcreativity.monpremierprojet.entities.Product;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String TAG = MainActivity.class.getCanonicalName();
+    private boolean modify = false;
+    private Product product;
 
     private TextInputEditText designationEditText;
     private TextInputEditText descriptionEditText;
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e(TAG, "saveProduct: ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         designationEditText = findViewById(R.id.name);
@@ -47,6 +51,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         priceError = findViewById(R.id.price_error);
         quantityInStockError = findViewById(R.id.quantity_in_stock_error);
         alertQuantityError = findViewById(R.id.alert_quantity_error);
+
+        Product p = (Product) getIntent().getSerializableExtra("THE_PROD");
+        if (p != null){
+            modify = true;
+            product = p;
+            designationEditText.setText(product.name);
+            descriptionEditText.setText(product.description);
+            priceEditText.setText(Double.toString(product.price));
+            quantityInStockEditText.setText(Double.toString(product.quantityInStock));
+            alertQuantityEditText.setText(Double.toString(product.alertQuantity));
+        }
 //        findViewById(R.id.my_btn).setOnClickListener(new View.OnClickListener(){
 //
 //            @Override
@@ -65,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void saveProduct(View view) {
-        Log.d(TAG, "saveProduct: ");
+        Log.e(TAG, "saveProduct: ");
         if (designationEditText.getText().toString().isEmpty() || descriptionEditText.getText().toString().isEmpty() || priceEditText.getText().toString().isEmpty() || quantityInStockEditText.getText().toString().isEmpty() || alertQuantityEditText.getText().toString().isEmpty()){
             Toast.makeText(getApplicationContext(), "Remplissez tous les champs", Toast.LENGTH_SHORT).show();
             designationError.setText("");
@@ -94,20 +109,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             priceError.setText("");
             quantityInStockError.setText("");
             alertQuantityError.setText("");
-            Product product = new Product();
+            if (!modify){
+                product = new Product();
+            }
             product.name = designationEditText.getText().toString();
             product.description = descriptionEditText.getText().toString();
             product.price = Double.parseDouble(priceEditText.getText().toString());
             product.quantityInStock = Double.parseDouble(quantityInStockEditText.getText().toString());
             product.alertQuantity = Double.parseDouble(alertQuantityEditText.getText().toString());
-            // ProductActivity.products.add(0, product);
-            Log.e(TAG, "saveProduct: " + product);
-            Toast.makeText(getApplicationContext(), "Produit ajouté", Toast.LENGTH_SHORT).show();
 
             Intent intent = getIntent();
-            intent.putExtra("NEW_PROD", product);
+            if (!modify){
+                intent.putExtra("NEW_PROD", product);
+            }else{
+                intent.putExtra("MODIFY_PROD", product);
+            }
             setResult(Activity.RESULT_OK, intent);
-            //finish();
+            finish();
         }
     }
 

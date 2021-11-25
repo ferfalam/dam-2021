@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -20,6 +21,9 @@ public interface ProductRoomDao {
     @Query("SELECT * FROM product WHERE name LIKE :search AND " +
             "description LIKE :search")
     List<Product> findByName(String search);
+
+    @Update
+    void update(Product product);
 
     @Insert
     void insertAll(Product... products);

@@ -85,6 +85,35 @@
                     </TableRow>
                 </TableLayout>
 
+                <!-- Buttons -->
+                <TableLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="0,1"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+                    <!--<TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/upd_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:text="@string/upd"
+                            style="?attr/borderlessButtonStyle"
+                            />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/del_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/del"
+                            android:textColor="@color/red_gold"
+                            style="?attr/borderlessButtonStyle"
+                            />
+                    </TableRow>-->
+                </TableLayout>
+
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>

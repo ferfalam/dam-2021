@@ -2,21 +2,23 @@ package io.artcreativity.monpremierprojet;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.graphics.Color;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.artcreativity.monpremierprojet.adapters.ProductAdapter;
-import io.artcreativity.monpremierprojet.dao.DataBaseHelper;
 import io.artcreativity.monpremierprojet.dao.DataBaseRoom;
 import io.artcreativity.monpremierprojet.dao.ProductDao;
 import io.artcreativity.monpremierprojet.dao.ProductRoomDao;
@@ -47,10 +48,7 @@ public class ProductActivity extends AppCompatActivity {
         binding = ActivityProductBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.toolbar);
-
         binding.ourListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Object p = binding.ourListView.getItemAtPosition(position);
@@ -61,7 +59,11 @@ public class ProductActivity extends AppCompatActivity {
             }
         });
 
-        productDao = new ProductDao(this);
+        setSupportActionBar(binding.toolbar);
+
+
+
+        // productDao = new ProductDao(this);
         productRoomDao = DataBaseRoom.getInstance(getApplicationContext()).productRoomDao();
         generateProducts();
         binding.fab.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +81,7 @@ public class ProductActivity extends AppCompatActivity {
 //        buildSimpleAdapterData();
 
         buildCustomAdapter();
+        registerForContextMenu(binding.ourListView);
     }
 
 
@@ -92,13 +95,30 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if(requestCode==MAIN_CALL) {
             if(resultCode== Activity.RESULT_OK) {
-                Log.e("TAG", "onActivityResult: " + data.getSerializableExtra("MY_PROD"));
+                Product new_product = (Product) data.getSerializableExtra("NEW_PROD");
+                Product modify_product = (Product) data.getSerializableExtra("MODIFY_PROD");
 
-                // TODO: 18/11/2021 Ajout d'un nouveau produit dans la liste
-                Product product = (Product) data.getSerializableExtra("MY_PROD");
-                products.add(product);
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (new_product != null){
+                            Log.e("NEW_PROD", new_product.toString());
+                            productRoomDao.insert(new_product);
+                            products.clear();
+                        } else if ( modify_product != null ){
+                            Log.e("MODIFY_PROD", modify_product.toString());
+                            // productRoomDao.update(modify_product.id, modify_product.name, modify_product.description, modify_product.quantityInStock, modify_product.price, modify_product.alertQuantity);
+                            productRoomDao.update(modify_product);
+                            products.clear();
+                        }
+                        products.addAll(productRoomDao.findAll());
+                    }
+                });
+                thread.start();
+                buildCustomAdapter();
             }
         }
     }
@@ -109,12 +129,55 @@ public class ProductActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
+    {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.product_action, menu);
+        int positionOfMenuItem = 1; // or whatever...
+        MenuItem item = menu.getItem(positionOfMenuItem);
+        SpannableString s = new SpannableString(getString(R.string.del));
+        s.setSpan(new ForegroundColorSpan(Color.RED), 0, s.length(), 0);
+        item.setTitle(s);
+    }
+
+
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        if(item.getItemId()==R.id.del){
+            Toast.makeText(getApplicationContext(),"Supprimer",Toast.LENGTH_LONG).show();
+            Object p = binding.ourListView.getItemAtPosition(info.position);
+            Product product = (Product) p;
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    productRoomDao.delete(product);
+                    runOnUiThread(()->{
+                        products.remove(product);
+                        productAdapter.notifyDataSetChanged();
+                    });
+                }
+            });
+            thread.start();
+        }
+        else if(item.getItemId()==R.id.upd){
+            Toast.makeText(getApplicationContext(),"Modifier",Toast.LENGTH_LONG).show();
+            Object p = binding.ourListView.getItemAtPosition(info.position);
+            Product product = (Product) p;
+            Intent intent = new Intent(ProductActivity.this, MainActivity.class);
+            intent.putExtra("THE_PROD", product);
+            startActivityIfNeeded(intent, MAIN_CALL);
+        }else{
+            return false;
+        }
+        return true;
+    }
+
     private void buildCustomAdapter() {
         productAdapter = new ProductAdapter(this, products);
         binding.ourListView.setAdapter(productAdapter);
-        binding.ourListView.setOnItemClickListener((adapterView, view, position, id) -> {
-
-        });
     }
 
     private void buildSimpleAdapterData() {
