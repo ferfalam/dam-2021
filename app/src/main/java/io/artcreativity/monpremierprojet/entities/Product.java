@@ -46,7 +46,7 @@ public class Product implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Product)) return false;
         Product product = (Product) o;
-        return id == product.id;
+        return serverId == product.serverId;
     }
 
     @Override

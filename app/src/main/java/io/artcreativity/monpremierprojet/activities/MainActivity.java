@@ -92,29 +92,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             product.quantityInStock = Double.parseDouble(quantityInStockEditText.getText().toString());
             product.alertQuantity = Double.parseDouble(alertQuantityEditText.getText().toString());
 
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (!modify){
-                        productRoomDao.insert(product);
-                    } else {
-                        productRoomDao.update(product);
-                    }
-                }
-            });
-            thread.start();
             new Thread(
                 ()->{
                     ProductWebService productWebService = new ProductWebService();
-                    Product save = productWebService.createProduct(product);
-//                    System.out.println(save);
-                    System.out.println("save :: " + save);
-                    runOnUiThread(()->{
+                    if (!modify){
+                        Product save = productWebService.createProduct(product);
+                        System.out.println("save :: " + save);
+                        if (save != null) {
+                            productRoomDao.insert(product);
+                        }
+                        runOnUiThread(()->{
 //                        Intent intent = getIntent();
 //                        intent.putExtra("MY_PROD", save);
 //                        setResult(Activity.RESULT_OK, intent);
 //                        finish();
-                    });
+                        });
+                    }else{
+                        Product save = productWebService.updateProduct(product);
+                        System.out.println("update :: " + save);
+                        if (save != null) {
+                            productRoomDao.update(product);
+                        }
+                    }
                 }
             ).start();
             Intent intent = getIntent();

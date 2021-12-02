@@ -16,13 +16,13 @@ public class NavigatorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppPreference appPreference = AppPreference.getInstance(this);
+        /*AppPreference appPreference = AppPreference.getInstance(this);
         if(!appPreference.isConnected()) {
             Intent intent = new Intent(this, AuthActivity.class);
             startActivity(intent);
             finish();
             return;
-        }
+        }*/
         setContentView(R.layout.navigator_activity);
         if (savedInstanceState == null) {
 //            getSupportFragmentManager() // composant qui permet de manipuler les fragments au sein d'une activity

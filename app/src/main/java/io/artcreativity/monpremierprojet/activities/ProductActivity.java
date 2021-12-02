@@ -37,6 +37,7 @@ import io.artcreativity.monpremierprojet.dao.ProductDao;
 import io.artcreativity.monpremierprojet.dao.ProductRoomDao;
 import io.artcreativity.monpremierprojet.databinding.ActivityProductBinding;
 import io.artcreativity.monpremierprojet.entities.Product;
+import io.artcreativity.monpremierprojet.webservices.ProductWebService;
 
 public class ProductActivity extends AppCompatActivity {
 
@@ -51,13 +52,13 @@ public class ProductActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AppPreference appPreference = AppPreference.getInstance(this);
+        /*AppPreference appPreference = AppPreference.getInstance(this);
         if(!appPreference.isConnected()) {
             Intent intent = new Intent(this, AuthActivity.class);
             startActivity(intent);
             finish();
             return;
-        }
+        }*/
         binding = ActivityProductBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -102,7 +103,6 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
     }
 
     @Override
@@ -157,8 +157,16 @@ public class ProductActivity extends AppCompatActivity {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    productRoomDao.delete(product);
+                    ProductWebService productWebService = new ProductWebService();
+                    Log.e("PRODUCT",""+product.serverId);
+                    Product save = productWebService.deleteProduct(product);
+                    System.out.println("delete :: " + save);
+                    if (save != null) {
+                        productRoomDao.delete(product);
+                    }
                     runOnUiThread(()->{
+
+                        System.out.println("serverId :: " + product.serverId);
                         products.remove(product);
                         productAdapter.notifyDataSetChanged();
                     });
@@ -201,7 +209,15 @@ public class ProductActivity extends AppCompatActivity {
 
     private void generateProducts() {
 
-        Thread thread = new Thread(new Runnable() {
+        new Thread(() -> {
+            ProductWebService productWebService = new ProductWebService();
+            List<Product> serverProducts = productWebService.getProducts();
+            runOnUiThread(()->{
+                products.addAll(serverProducts);
+            });
+        }).start();
+
+        /*Thread thread = new Thread(new Runnable() {
             final List<Product> localProducts = new ArrayList<>();
             @Override
             public void run() {
@@ -222,7 +238,7 @@ public class ProductActivity extends AppCompatActivity {
                 });
             }
         });
-        thread.start();
+        thread.start();*/
 //        products = productRoomDao.findAll();
 //        if(products.isEmpty()) {
 //            productRoomDao.insert(new Product("Galaxy S21", "Samsung Galaxy S21", 800000, 100, 10));

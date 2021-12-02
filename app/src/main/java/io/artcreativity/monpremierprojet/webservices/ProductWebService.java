@@ -20,7 +20,8 @@ public class ProductWebService {
     OkHttpClient httpClient = new OkHttpClient();
     GsonBuilder builder = new GsonBuilder();
     Gson gson = builder.create();
-    String baseUrl = "http://192.168.1.118:8080/api/products";
+    //L'IP est modifié selon la connexion sur laquelle nous sommes
+    String baseUrl = "http://192.168.1.140:8080/api/products";
 
     public Product createProduct(Product product) {
         RequestBody body = RequestBody.create(gson.toJson(product),
@@ -54,4 +55,38 @@ public class ProductWebService {
             return new ArrayList<>();
         }
     }
+
+    public Product updateProduct(Product product) {
+        RequestBody body = RequestBody.create(gson.toJson(product),
+                MediaType.get("application/json; charset=utf-8"));
+        Request request = new Request.Builder()
+                .url(baseUrl+"/"+product.serverId)
+                .put(body)
+                .build();
+
+        try (Response response = httpClient.newCall(request).execute()) {
+            return gson.fromJson(response.body().string(), Product.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
+
+    public Product deleteProduct(Product product) {
+        Request request = new Request.Builder()
+                .url(baseUrl+"/"+product.serverId)
+                .delete()
+                .build();
+
+        try (Response response = httpClient.newCall(request).execute()) {
+            return gson.fromJson(response.body().string(), Product.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
+
+
 }

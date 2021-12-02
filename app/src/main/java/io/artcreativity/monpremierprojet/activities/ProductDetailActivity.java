@@ -27,6 +27,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         productQuantity = findViewById(R.id.product_quantity);
         productAlertQuantity = findViewById(R.id.product_alert_quantity);
         Product product = (Product) getIntent().getSerializableExtra("MY_PROD");
+        Log.e("PRODUCT", ""+product.serverId);
         productDesignation.setText(product.name);
         productDescription.setText(product.description);
         productPrice.setText("XOF " + product.price);
