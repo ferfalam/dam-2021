@@ -18,6 +18,7 @@ import io.artcreativity.monpremierprojet.dao.DataBaseRoom;
 import io.artcreativity.monpremierprojet.dao.ProductRoomDao;
 import io.artcreativity.monpremierprojet.R;
 import io.artcreativity.monpremierprojet.entities.Product;
+import io.artcreativity.monpremierprojet.webservices.ProductWebService;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -102,6 +103,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
             thread.start();
+            new Thread(
+                ()->{
+                    ProductWebService productWebService = new ProductWebService();
+                    Product save = productWebService.createProduct(product);
+//                    System.out.println(save);
+                    System.out.println("save :: " + save);
+                    runOnUiThread(()->{
+//                        Intent intent = getIntent();
+//                        intent.putExtra("MY_PROD", save);
+//                        setResult(Activity.RESULT_OK, intent);
+//                        finish();
+                    });
+                }
+            ).start();
             Intent intent = getIntent();
             intent.putExtra("PROD", product);
             intent.putExtra("MODIFY", modify);
