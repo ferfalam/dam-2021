@@ -101,24 +101,12 @@ public class ProductActivity extends AppCompatActivity {
                 Product new_product = (Product) data.getSerializableExtra("NEW_PROD");
                 Product modify_product = (Product) data.getSerializableExtra("MODIFY_PROD");
 
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (new_product != null){
-                            Log.e("NEW_PROD", new_product.toString());
-                            productRoomDao.insert(new_product);
-                            products.clear();
-                        } else if ( modify_product != null ){
-                            Log.e("MODIFY_PROD", modify_product.toString());
-                            // productRoomDao.update(modify_product.id, modify_product.name, modify_product.description, modify_product.quantityInStock, modify_product.price, modify_product.alertQuantity);
-                            productRoomDao.update(modify_product);
-                            products.clear();
-                        }
-                        products.addAll(productRoomDao.findAll());
-                    }
-                });
-                thread.start();
-                buildCustomAdapter();
+                if (new_product != null){
+                    products.add(new_product);
+                } else if ( modify_product != null ){
+                    products.set(products.indexOf(modify_product), modify_product);
+                }
+                productAdapter.notifyDataSetChanged();
             }
         }
     }

@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 public class Product implements Serializable {
@@ -36,6 +37,19 @@ public class Product implements Serializable {
         this.price = price;
         this.quantityInStock = quantityInStock;
         this.alertQuantity = alertQuantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Product)) return false;
+        Product product = (Product) o;
+        return id == product.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, price, quantityInStock, alertQuantity);
     }
 
     @Override

@@ -21,6 +21,7 @@ import io.artcreativity.monpremierprojet.entities.Product;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String TAG = MainActivity.class.getCanonicalName();
+    private ProductRoomDao productRoomDao;
     private boolean modify = false;
     private Product product;
 
@@ -119,12 +120,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             product.alertQuantity = Double.parseDouble(alertQuantityEditText.getText().toString());
 
             Intent intent = getIntent();
-            if (!modify){
-                intent.putExtra("NEW_PROD", product);
-            }else{
-                intent.putExtra("MODIFY_PROD", product);
-            }
-            setResult(Activity.RESULT_OK, intent);
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (!modify){
+                        productRoomDao.insert(product);
+                        intent.putExtra("NEW_PROD", product);
+                    } else {
+                        productRoomDao.update(product);
+                        intent.putExtra("MODIFY_PROD", product);
+                    }
+                }
+            });
+            thread.start();
             finish();
         }
     }
