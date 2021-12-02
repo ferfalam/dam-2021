@@ -127,12 +127,15 @@ public class ProductActivity extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
     {
         super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.product_action, menu);
-        int positionOfMenuItem = 1; // or whatever...
-        MenuItem item = menu.getItem(positionOfMenuItem);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        //getMenuInflater().inflate(R.menu.product_action, menu);
+        //int positionOfMenuItem = 1; //
+        //MenuItem item = menu.getItem(positionOfMenuItem);
         SpannableString s = new SpannableString(getString(R.string.del));
         s.setSpan(new ForegroundColorSpan(Color.RED), 0, s.length(), 0);
-        item.setTitle(s);
+        //item.setTitle(s);
+        menu.add(Menu.NONE, 0, Menu.NONE, "Modifier");
+        menu.add(Menu.NONE, 0, Menu.NONE, s);
     }
 
 

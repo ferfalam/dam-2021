@@ -88,11 +88,13 @@ public class AuthActivity extends AppCompatActivity implements AuthCallback {
                     @Override
                     public void onVerificationFailed(FirebaseException e) {
                         // ...
+                        Log.e("ErrorFirebase", e.getMessage());
                         Toast.makeText(getApplicationContext(), "Erreur d'envoi de code", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .build();
     }
+
 
     @Override
     public void sendMessage(String phoneNumber) {
