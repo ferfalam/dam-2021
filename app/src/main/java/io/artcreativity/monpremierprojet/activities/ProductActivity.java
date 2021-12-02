@@ -104,13 +104,13 @@ public class ProductActivity extends AppCompatActivity {
 
         if(requestCode==MAIN_CALL) {
             if(resultCode== Activity.RESULT_OK) {
-                Product new_product = (Product) data.getSerializableExtra("NEW_PROD");
-                Product modify_product = (Product) data.getSerializableExtra("MODIFY_PROD");
+                Product prod = (Product) data.getSerializableExtra("PROD");
+                boolean modify = (boolean) data.getSerializableExtra("MODIFY");
 
-                if (new_product != null){
-                    products.add(new_product);
-                } else if ( modify_product != null ){
-                    products.set(products.indexOf(modify_product), modify_product);
+                if (!modify){
+                    products.add(0, prod);
+                } else{
+                    products.set(products.indexOf(prod), prod);
                 }
                 productAdapter.notifyDataSetChanged();
             }
@@ -135,7 +135,7 @@ public class ProductActivity extends AppCompatActivity {
         s.setSpan(new ForegroundColorSpan(Color.RED), 0, s.length(), 0);
         //item.setTitle(s);
         menu.add(Menu.NONE, 0, Menu.NONE, "Modifier");
-        menu.add(Menu.NONE, 0, Menu.NONE, s);
+        menu.add(Menu.NONE, 1, Menu.NONE, s);
     }
 
 
@@ -143,7 +143,7 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item){
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        if(item.getItemId()==R.id.del){
+        if(item.getItemId()==1){
             Toast.makeText(getApplicationContext(),"Supprimer",Toast.LENGTH_LONG).show();
             Object p = binding.ourListView.getItemAtPosition(info.position);
             Product product = (Product) p;
@@ -159,7 +159,7 @@ public class ProductActivity extends AppCompatActivity {
             });
             thread.start();
         }
-        else if(item.getItemId()==R.id.upd){
+        else if(item.getItemId()==0){
             Toast.makeText(getApplicationContext(),"Modifier",Toast.LENGTH_LONG).show();
             Object p = binding.ourListView.getItemAtPosition(info.position);
             Product product = (Product) p;
@@ -193,18 +193,6 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     private void generateProducts() {
-//        products = productDao.findAll();
-//        if(products.isEmpty()) {
-//            productDao.insert(new Product("Galaxy S21", "Samsung Galaxy S21", 800000, 100, 10));
-//            productDao.insert(new Product("Galaxy Note 10", "Samsung Galaxy Note 10", 800000, 100, 10));
-//            productDao.insert(new Product("Redmi S11", "Xiaomi Redmi S11", 300000, 100, 10));
-//            productDao.insert(new Product("Galaxy S21", "Samsung Galaxy S21", 800000, 100, 10));
-//            productDao.insert(new Product("Galaxy S21", "Samsung Galaxy S21", 800000, 100, 10));
-//            productDao.insert(new Product("Galaxy S21", "Samsung Galaxy S21", 800000, 100, 10));
-//            productDao.insert(new Product("Galaxy S21", "Samsung Galaxy S21", 800000, 100, 10));
-//
-//            products = productDao.findAll();
-//        }
 
         Thread thread = new Thread(new Runnable() {
             final List<Product> localProducts = new ArrayList<>();

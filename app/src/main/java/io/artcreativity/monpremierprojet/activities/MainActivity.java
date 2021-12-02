@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import io.artcreativity.monpremierprojet.dao.DataBaseRoom;
 import io.artcreativity.monpremierprojet.dao.ProductRoomDao;
 import io.artcreativity.monpremierprojet.R;
 import io.artcreativity.monpremierprojet.entities.Product;
@@ -31,14 +32,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextInputEditText quantityInStockEditText;
     private TextInputEditText alertQuantityEditText;
 
-    private TextView designationError;
-    private TextView descriptionError;
-    private TextView priceError;
-    private TextView quantityInStockError;
-    private TextView alertQuantityError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        productRoomDao = DataBaseRoom.getInstance(getApplicationContext()).productRoomDao();
         Log.e(TAG, "saveProduct: ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -47,11 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         priceEditText = findViewById(R.id.price);
         quantityInStockEditText = findViewById(R.id.quantity_in_stock);
         alertQuantityEditText = findViewById(R.id.alert_quantity);
-        designationError = findViewById(R.id.name_error);
-        descriptionError = findViewById(R.id.description_error);
-        priceError = findViewById(R.id.price_error);
-        quantityInStockError = findViewById(R.id.quantity_in_stock_error);
-        alertQuantityError = findViewById(R.id.alert_quantity_error);
 
         Product p = (Product) getIntent().getSerializableExtra("THE_PROD");
         if (p != null){
@@ -81,35 +73,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void saveProduct(View view) {
-        Log.e(TAG, "saveProduct: ");
-        if (designationEditText.getText().toString().isEmpty() || descriptionEditText.getText().toString().isEmpty() || priceEditText.getText().toString().isEmpty() || quantityInStockEditText.getText().toString().isEmpty() || alertQuantityEditText.getText().toString().isEmpty()){
-            Toast.makeText(getApplicationContext(), "Remplissez tous les champs", Toast.LENGTH_SHORT).show();
-            designationError.setText("");
-            descriptionError.setText("");
-            priceError.setText("");
-            quantityInStockError.setText("");
-            alertQuantityError.setText("");
-            if (designationEditText.getText().toString().isEmpty()){
-                designationError.setText(R.string.name_error_text);
-            }
-            if (descriptionEditText.getText().toString().isEmpty()){
-                descriptionError.setText(R.string.description_error_text);
-            }
-            if (priceEditText.getText().toString().isEmpty()){
-                priceError.setText(R.string.price_error_text);
-            }
-            if (quantityInStockEditText.getText().toString().isEmpty()){
-                quantityInStockError.setText(R.string.quantity_in_stock_error_text);
-            }
-            if (alertQuantityEditText.getText().toString().isEmpty()){
-                alertQuantityError.setText(R.string.alert_quantity_error_text);
-            }
-        } else {
-            designationError.setText("");
-            descriptionError.setText("");
-            priceError.setText("");
-            quantityInStockError.setText("");
-            alertQuantityError.setText("");
+        boolean des = checkEmpty(designationEditText);
+        boolean desc = checkEmpty(descriptionEditText);
+        boolean pri = checkEmpty(priceEditText);
+        boolean qis = checkEmpty(quantityInStockEditText);
+        boolean al = checkEmpty(alertQuantityEditText);
+
+        if (des && desc && pri && qis && al)
+        {
+
             if (!modify){
                 product = new Product();
             }
@@ -119,22 +91,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             product.quantityInStock = Double.parseDouble(quantityInStockEditText.getText().toString());
             product.alertQuantity = Double.parseDouble(alertQuantityEditText.getText().toString());
 
-            Intent intent = getIntent();
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     if (!modify){
                         productRoomDao.insert(product);
-                        intent.putExtra("NEW_PROD", product);
                     } else {
                         productRoomDao.update(product);
-                        intent.putExtra("MODIFY_PROD", product);
                     }
                 }
             });
             thread.start();
+            Intent intent = getIntent();
+            intent.putExtra("PROD", product);
+            intent.putExtra("MODIFY", modify);
+
+            setResult(Activity.RESULT_OK, intent);
             finish();
         }
+    }
+
+    private boolean checkEmpty(TextInputEditText editText) {
+        if (editText.getText().toString().isEmpty()){
+            editText.setError("Champ obligatoire");
+            return false;
+        }
+        return true;
     }
 
     @Override

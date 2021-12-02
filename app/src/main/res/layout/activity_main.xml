@@ -55,13 +55,6 @@
                     >
 
                 </com.google.android.material.textfield.TextInputEditText>
-                <TextView
-                    android:id="@+id/name_error"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/error_text"
-                    android:textColor="@color/error_color"
-                />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -81,13 +74,6 @@
                     >
 
                 </com.google.android.material.textfield.TextInputEditText>
-                <TextView
-                    android:id="@+id/description_error"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/error_text"
-                    android:textColor="@color/error_color"
-                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -106,13 +92,6 @@
                     >
 
                 </com.google.android.material.textfield.TextInputEditText>
-                <TextView
-                    android:id="@+id/price_error"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/error_text"
-                    android:textColor="@color/error_color"
-                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -130,13 +109,6 @@
                     >
 
                 </com.google.android.material.textfield.TextInputEditText>
-                <TextView
-                    android:id="@+id/quantity_in_stock_error"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/error_text"
-                    android:textColor="@color/error_color"
-                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -154,13 +126,6 @@
                     >
 
                 </com.google.android.material.textfield.TextInputEditText>
-                <TextView
-                    android:id="@+id/alert_quantity_error"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/error_text"
-                    android:textColor="@color/error_color"
-                    />
             </com.google.android.material.textfield.TextInputLayout>
 
 

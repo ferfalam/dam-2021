@@ -14,11 +14,6 @@
             android:exported="true"
             android:label="@string/title_activity_auth"
             android:theme="@style/Theme.MonPremierProjet.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activities.NavigatorActivity"
@@ -29,7 +24,14 @@
             android:name=".activities.ProductActivity"
             android:exported="true"
             android:label="@string/title_activity_product"
-            android:theme="@style/Theme.MonPremierProjet.NoActionBar"></activity>
+            android:theme="@style/Theme.MonPremierProjet.NoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.ProductDetailActivity"
             android:exported="true" />
