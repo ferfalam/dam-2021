@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.editproduct.EditProductFragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,13 +51,6 @@
                     >
 
                 </com.google.android.material.textfield.TextInputEditText>
-                <TextView
-                    android:id="@+id/name_error"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/error_text"
-                    android:textColor="@color/error_color"
-                />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -81,13 +70,6 @@
                     >
 
                 </com.google.android.material.textfield.TextInputEditText>
-                <TextView
-                    android:id="@+id/description_error"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/error_text"
-                    android:textColor="@color/error_color"
-                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -106,13 +88,6 @@
                     >
 
                 </com.google.android.material.textfield.TextInputEditText>
-                <TextView
-                    android:id="@+id/price_error"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/error_text"
-                    android:textColor="@color/error_color"
-                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -130,13 +105,6 @@
                     >
 
                 </com.google.android.material.textfield.TextInputEditText>
-                <TextView
-                    android:id="@+id/quantity_in_stock_error"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/error_text"
-                    android:textColor="@color/error_color"
-                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -154,13 +122,6 @@
                     >
 
                 </com.google.android.material.textfield.TextInputEditText>
-                <TextView
-                    android:id="@+id/alert_quantity_error"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/error_text"
-                    android:textColor="@color/error_color"
-                    />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -178,4 +139,4 @@
         </LinearLayout>
     </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

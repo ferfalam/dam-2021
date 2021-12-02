@@ -1,4 +1,4 @@
-package io.artcreativity.monpremierprojet;
+package io.artcreativity.monpremierprojet.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,9 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import io.artcreativity.monpremierprojet.dao.ProductRoomDao;
+import io.artcreativity.monpremierprojet.R;
 import io.artcreativity.monpremierprojet.entities.Product;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
